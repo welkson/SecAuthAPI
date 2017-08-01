@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from SecAuthAPI.Manager.models import Policy
+
+
+class PolicyAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Policy, PolicyAdmin)
