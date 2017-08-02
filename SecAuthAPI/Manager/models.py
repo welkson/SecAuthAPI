@@ -7,5 +7,9 @@ class Policy(models.Model):
     name = models.CharField(max_length=30, unique=True)
     content = models.TextField()
 
-    def __str__(self):
+    class Meta:
+        verbose_name = "Policy"
+        verbose_name_plural = "Policies"
+
+    def __unicode__(self):
         return self.name
