@@ -1,7 +1,7 @@
 from rest_framework import viewsets
+
 from SecAuthAPI.API.serializers import PolicySerializer
 from SecAuthAPI.Manager.models import Policy
-
 
 class PolicyViewSet(viewsets.ModelViewSet):
     """

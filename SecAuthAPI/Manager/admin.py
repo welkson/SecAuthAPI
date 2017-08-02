@@ -1,9 +1,21 @@
 from django.contrib import admin
+from django import forms
 
 from SecAuthAPI.Manager.models import Policy
+from widgets import HtmlEditor
+
+
+class PolicyAdminForm(forms.ModelForm):
+    model = Policy
+
+    class Meta:
+        fields = '__all__'
+        widgets = {
+            'content': HtmlEditor(attrs={'style': 'width: 90%; height: 100%;'}),
+        }
 
 
 class PolicyAdmin(admin.ModelAdmin):
-    pass
+    form = PolicyAdminForm
 
 admin.site.register(Policy, PolicyAdmin)

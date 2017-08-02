@@ -5,4 +5,4 @@ from SecAuthAPI.Manager.models import Policy
 class PolicySerializer(serializers.ModelSerializer):
     class Meta:
         model = Policy
-        fields = ('name', 'content')
+        fields = ('name', 'description', 'content')
