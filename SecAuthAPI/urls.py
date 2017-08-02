@@ -5,7 +5,7 @@ from SecAuthAPI.API import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'policy', views.PolicySerializer, base_name="Policy")
+router.register(r'policy', views.GroupViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
