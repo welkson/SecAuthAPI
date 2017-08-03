@@ -19,3 +19,4 @@ class PolicyAdmin(admin.ModelAdmin):
     form = PolicyAdminForm
 
 admin.site.register(Policy, PolicyAdmin)
+admin.site.site_header = 'SecAuthAPI - Dashboard'
