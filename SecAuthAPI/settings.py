@@ -127,11 +127,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = join(BASE_DIR, 'static')
-# print "STATIC_ROOT -> %s" % STATIC_ROOT
-
 STATIC_ROOT = os.path.join(PROJECT_ROOT_PATH, 'static')
 
 # URL prefix for static files.
@@ -144,3 +139,11 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+# Authorization Server (AS)
+as_product = 1     # 1- WSO2IS, 2-AuthZForce
+as_api_url = 'https://localhost:9443/'
+as_authtype = 1    # 1- Basic (user/password), 2- OAuth Token
+as_user = 'admin'
+as_password = 'admin'
+as_token = ''
