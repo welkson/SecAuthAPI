@@ -1,8 +1,8 @@
-class AuthService(object):
+class AuthService(object):          # Abstract Base Class
     def connection(self):
         raise NotImplementedError
 
-    def create_policy(self, name, description, content):
+    def create_policy(self, content):
         raise NotImplementedError
 
     def update_policy(self):

@@ -18,5 +18,10 @@ class PolicyAdminForm(forms.ModelForm):
 class PolicyAdmin(admin.ModelAdmin):
     form = PolicyAdminForm
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # editing an existing object
+            return self.readonly_fields + ('name', )
+        return self.readonly_fields
+
 admin.site.register(Policy, PolicyAdmin)
 admin.site.site_header = 'SecAuthAPI - Dashboard'
