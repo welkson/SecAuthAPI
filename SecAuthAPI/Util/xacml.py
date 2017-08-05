@@ -4,4 +4,5 @@ class Util:
         from xml.dom import minidom
         xmldoc = minidom.parseString(content)
         itemlist = xmldoc.getElementsByTagName('Policy')
+
         return itemlist[0].attributes['PolicyId'].value

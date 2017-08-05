@@ -18,10 +18,9 @@ class PolicyAdminForm(forms.ModelForm):
 class PolicyAdmin(admin.ModelAdmin):
     form = PolicyAdminForm
 
+    # field name is read-only (captured from xacml file)
     def get_readonly_fields(self, request, obj=None):
-        if obj: # editing an existing object
-            return self.readonly_fields + ('name', )
-        return self.readonly_fields
+        return self.readonly_fields + ('name', )
 
 admin.site.register(Policy, PolicyAdmin)
 admin.site.site_header = 'SecAuthAPI - Dashboard'

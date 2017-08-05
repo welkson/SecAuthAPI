@@ -4,11 +4,12 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from SecAuthAPI.API.serializers import PolicySerializer
 from SecAuthAPI.Manager.models import Policy
+from SecAuthAPI.PDPAdapter.adapter import Adapter
 
 
 class PolicyViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows Permisions to be viewed or edited.
+    API endpoint that allows Permisions to be viewed or edited
     """
     queryset = Policy.objects.all()
     serializer_class = PolicySerializer
@@ -17,7 +18,7 @@ class PolicyViewSet(viewsets.ModelViewSet):
 @api_view(['GET', 'POST'])
 def policy_list(request):
     """
-    Insert (POST) or List all policies (GET).
+    Insert (POST) or List all policies (GET)
     """
     if request.method == 'GET':
         snippets = Policy.objects.all()
@@ -35,7 +36,7 @@ def policy_list(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def policy_detail(request, policy_name):
     """
-    Retrieve, update or delete a policy instance.
+    Retrieve, update or delete a policy instance
     """
     try:
         policy = Policy.objects.get(name=policy_name)
@@ -56,3 +57,19 @@ def policy_detail(request, policy_name):
     elif request.method == 'DELETE':
         policy.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+def policy_publish(request, policy_name):
+    """
+    Deploy policy on PDP (Authorization Service)
+    """
+    try:
+        policy = Policy.objects.get(name=policy_name)
+    except Policy.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        Adapter.add_policy(policy.content)
+
+    return True
