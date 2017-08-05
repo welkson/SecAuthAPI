@@ -39,6 +39,16 @@ class WSO2(AuthService):
 
         return client.service.addPolicy(policy_dto)
 
+    def update_policy(self, content):
+        client = self.connection()
+
+        policy_dto = client.factory.create("ax2337:PolicyDTO")  # DTO from WSDL Schema
+        policy_dto.active = True
+        policy_dto.policy = content
+        policy_dto.promote = True
+
+        return client.service.updatePolicy(policy_dto)
+
     def delete_policy(self, name):
         self.connection().service.removePolicy(name, True)  # PolicyID, dePromote
 

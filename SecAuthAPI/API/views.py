@@ -29,6 +29,12 @@ def policy_list(request):
         serializer = PolicySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
+            # add policy in PAP/PDP
+            Adapter.add_policy(serializer.data['name'],
+                               serializer.data['description'],
+                               serializer.data['content'])
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -51,11 +57,22 @@ def policy_detail(request, policy_name):
         serializer = PolicySerializer(policy, data=request.data)
         if serializer.is_valid():
             serializer.save()
+
+            # update policy in PAP/PDP
+            Adapter.update_policy(serializer.data['name'],
+                                  serializer.data['description'],
+                                  serializer.data['content'])
+
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
+        # delete policy in PAP/PDP
+        Adapter.delete_policy(policy.name)
+
+        # delete policy in database
         policy.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -70,6 +87,6 @@ def policy_publish(request, policy_name):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'POST':
-        Adapter.add_policy(policy.content)
+        pass    # TODO: NotImplemented
 
-    return True
+    return Response(status=status.HTTP_200_OK)
