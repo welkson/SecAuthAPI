@@ -74,19 +74,3 @@ def policy_detail(request, policy_name):
         policy.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(['POST'])
-def policy_publish(request, policy_name):
-    """
-    Deploy policy on PDP (Authorization Service)
-    """
-    try:
-        policy = Policy.objects.get(name=policy_name)
-    except Policy.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'POST':
-        pass    # TODO: NotImplemented
-
-    return Response(status=status.HTTP_200_OK)

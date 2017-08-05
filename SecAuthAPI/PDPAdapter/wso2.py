@@ -53,3 +53,5 @@ class WSO2(AuthService):
         self.connection().service.removePolicy(name, True)  # PolicyID, dePromote
 
         return True     # TODO: return error or successful result
+
+# TODO: WSO2 apply police (refresh? restart service?)

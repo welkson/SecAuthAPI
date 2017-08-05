@@ -21,7 +21,7 @@ urlpatterns = [
     # REST API
     url(r'^policy/$', views.policy_list),
     url(r'^policy/(?P<policy_name>\w+)', views.policy_detail),
-    url(r'^policy/(?P<policy_name>\w+)/publish', views.policy_publish),
+    # url(r'^policy/(?P<policy_name>\w+)/publish', views.policy_publish),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
