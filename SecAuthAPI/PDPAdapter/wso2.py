@@ -1,5 +1,7 @@
 from authservice import AuthService
 from suds.client import Client
+from SecAuthAPI import settings
+
 # import logging
 
 # ignore self-signed certificate errors
@@ -13,12 +15,21 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 class WSO2(AuthService):
     """ WSO2 Authorization Services """
-    def __init__(self, url, auth_type, user, password, token):
-        self.url = url
-        self.auth_type = auth_type
-        self.user = user
-        self.password = password
-        self.token = token
+    def __init__(self, *args, **kwargs):
+        if 'url' in kwargs:
+            # get conf from construct parameters
+            self.url = kwargs.get('url')
+            self.auth_type = kwargs.get('auth_type')
+            self.user = kwargs.get('user')
+            self.password = kwargs.get('password')
+            self.token = kwargs.get('token')
+        else:
+            # get conf from settings.py
+            self.url = settings.as_api_url
+            self.auth_type = settings.as_authtype
+            self.user = settings.as_user
+            self.password = settings.as_password
+            self.token = settings.as_token
 
     def connection(self):
         url_api = self.url + 'services/EntitlementPolicyAdminService?wsdl'
