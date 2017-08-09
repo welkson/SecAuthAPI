@@ -1,8 +1,12 @@
 class Util:
     @staticmethod
     def get_policy_name(content):
-        from xml.dom import minidom
-        xmldoc = minidom.parseString(content)
-        itemlist = xmldoc.getElementsByTagName('Policy')
+        from BeautifulSoup import BeautifulStoneSoup as Soup
+        soup = Soup(content)
+        return soup.policy["policyid"]
 
-        return itemlist[0].attributes['PolicyId'].value
+        # TODO: old implementation (remove)
+        # from xml.dom import minidom     # TODO:
+        # xmldoc = minidom.parseString(content)
+        # itemlist = xmldoc.getElementsByTagName('Policy')
+        # return itemlist[0].attributes['PolicyId'].value

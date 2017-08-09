@@ -1,3 +1,5 @@
+from authservice import AuthService
+
 class AuthZForce(AuthService):
     """AuthZForce Authorization Services"""
     def __init__(self, url, auth_type, user, password, token):
