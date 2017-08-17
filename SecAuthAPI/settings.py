@@ -42,14 +42,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'SecAuthAPI.Manager',
     'SecAuthAPI.Util',
+    'SecAuthAPI.API',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -142,7 +145,7 @@ STATICFILES_FINDERS = (
 )
 
 # Authorization Server (AS)
-as_product = 1     # 1- WSO2IS, 2-AuthZForce
+as_product = 0     # 0- None, 1- WSO2 IS, 2-AuthZForce
 as_api_url = 'https://localhost:9443/'
 as_authtype = 1    # 1- Basic (user/password), 2- OAuth Token
 as_user = 'admin'
