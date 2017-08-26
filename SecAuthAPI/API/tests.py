@@ -9,23 +9,21 @@ from django.contrib.auth.models import User
 class PolicyTests(APITestCase):
     def setUp(self):
         # create admin user
-        username="admin"
+        username = "admin"
         password = "Test1234"
-        user = User.objects.create_superuser(username, 'welkson@gmail.com', password)
+        user = User.objects.create_superuser(username, 'test@mail.com', password)
 
         # API Auth
-        # self.client.auth = HTTPBasicAuth(user.username, password)
         self.client.login(username=user.username, password=password)
 
     def test_add_policy(self):
         """
         Ensure we can create a new policy object
         """
-        data = {'description': 'Policy TestCase', 'policy': 'Test XACML'}
+        data = {'description': 'Policy TestCase', 'policy': 'Test XACML'}   # TODO: xacml content in field "policy"
 
         # testcase
         response = self.client.post("/policy/", data, format='json')
-        # response = self.client.get("/policy/")
         print "\n[Response] \n%s \n[End Response]\n" % response
 
         # response
