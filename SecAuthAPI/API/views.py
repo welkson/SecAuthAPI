@@ -100,12 +100,11 @@ def policy_modify_attribute(request, policy_name, rule_name, attribute_name):
         # change policy
         new_policy = Xacml.modify_attribute_value(policy.content, rule_name, attribute_name, request.data['attribute_value'])
 
-        # fix request.data (querydict)
+        # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)
         new_request_data.appendlist('name', policy_name)
         new_request_data.appendlist('description', policy.description)
         new_request_data.appendlist('content', new_policy)
-
         serializer = PolicySerializer(policy, data=new_request_data)
 
         if serializer.is_valid():
