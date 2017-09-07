@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from SecAuthAPI.Manager.models import Policy
+from SecAuthAPI.Core.models import Policy
 from widgets import HtmlEditor
 
 

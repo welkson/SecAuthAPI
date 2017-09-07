@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class ManagerConfig(AppConfig):
-    name = 'Manager'
+    name = 'Core'

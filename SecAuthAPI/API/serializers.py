@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from SecAuthAPI.Manager.models import Policy
+from SecAuthAPI.Core.models import Policy
 
 
 class PolicySerializer(serializers.ModelSerializer):

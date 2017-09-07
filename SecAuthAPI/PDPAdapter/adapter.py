@@ -4,8 +4,7 @@ from SecAuthAPI import settings
 
 class Adapter:
     @staticmethod
-    def add_policy(name, description, content):
-        print "<<<<<<<< AS EM USO: ", settings.as_product
+    def create_policy(name, description, content):
         if settings.as_product == 1:                                     # WSO2 (TODO: constants?)
             # Add new Policy
             return WSO2().create_policy(content)
@@ -39,3 +38,9 @@ class Adapter:
 
         else:
             return None
+
+    @staticmethod
+    def get_policy(name):
+        return NotImplemented
+
+# TODO: method to attribute modify?

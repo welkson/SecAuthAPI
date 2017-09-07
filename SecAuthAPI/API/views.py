@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from SecAuthAPI.API.serializers import PolicySerializer
-from SecAuthAPI.Manager.models import Policy
+from SecAuthAPI.Core.models import Policy
 from SecAuthAPI.PDPAdapter.adapter import Adapter
 
 

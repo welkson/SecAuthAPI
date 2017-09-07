@@ -2,7 +2,7 @@
 # from requests.auth import HTTPBasicAuth
 from rest_framework import status
 from rest_framework.test import APITestCase
-from SecAuthAPI.Manager.models import Policy
+from SecAuthAPI.Core.models import Policy
 from django.contrib.auth.models import User
 
 
