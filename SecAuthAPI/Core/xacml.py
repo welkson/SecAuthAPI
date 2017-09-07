@@ -5,6 +5,16 @@ from collections import OrderedDict
 import xmltodict
 import json
 from BeautifulSoup import BeautifulStoneSoup as Soup
+from functools import reduce
+import operator
+
+
+def get_from_dict(data_dict, keys):
+    return reduce(operator.getitem, keys, data_dict)
+
+
+def set_in_dict(data_dict, keys, value):
+    get_from_dict(data_dict, keys[:-1])[keys[-1]] = value
 
 
 class Xacml:
@@ -14,10 +24,10 @@ class Xacml:
         return soup.policy["policyid"]
 
     @staticmethod
-    def get_rule_index(policy_dic, rule_id):
+    def get_rule_index(policy_dic, rule_name):
         if type(policy_dic.get('Policy').get('Rule')) == list:  # if Lists then N rules
             for n, r in enumerate(policy_dic.get('Policy').get('Rule')):
-                if r['@RuleId'] == rule_id:
+                if r['@RuleId'] == rule_name:
                     return n
         return -1   # only 1 rule
 
@@ -53,15 +63,15 @@ class Xacml:
             return {'IsValid': False}, {'message': schema.error_log}
 
     @staticmethod
-    def modify_attribute_value(policy, rule_id, attribute_id, attribute_value):
+    def modify_attribute_value(policy, rule_name, attribute_name, attribute_value):
         # convert xacml to Dict
         policy_dic = xmltodict.parse(policy)
 
         # get rule index
-        rule_idx = Xacml.get_rule_index(policy_dic, rule_id)
+        rule_idx = Xacml.get_rule_index(policy_dic, rule_name)
 
         # get attribute in rule
-        attr = Xacml.get_attribute(policy_dic, rule_idx, attribute_id)
+        attr = Xacml.get_attribute(policy_dic, rule_idx, attribute_name)
         if attr:
             attr.get('AllOf').get('Match').get('AttributeValue')['#text'] = attribute_value  # change attribute
 
