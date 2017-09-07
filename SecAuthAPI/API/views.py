@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from SecAuthAPI.API.serializers import PolicySerializer
 from SecAuthAPI.Core.models import Policy
+from SecAuthAPI.Core.xacml import Xacml
 from SecAuthAPI.PDPAdapter.adapter import Adapter
 from django.http import QueryDict
 
@@ -37,6 +38,7 @@ def policy_list(request):
                                   serializer.data['content'])
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -64,7 +66,7 @@ def policy_detail(request, policy_name):
                                   serializer.data['description'],
                                   serializer.data['content'])
 
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
@@ -96,17 +98,24 @@ def policy_modify_attribute(request, policy_name, rule_name, attribute_name):
 
     if request.method == 'PUT':
         # change policy
+        new_policy = Xacml.modify_attribute_value(policy.content, rule_name, attribute_name, request.data['attribute_value'])
 
-
-        # refaz request.data (querydict)
+        # fix request.data (querydict)
         new_request_data = QueryDict(mutable=True)
-        new_request_data.appendlist('name', '')
-        new_request_data.appendlist('description', '')
-        new_request_data.appendlist('content', '')
+        new_request_data.appendlist('name', policy_name)
+        new_request_data.appendlist('description', policy.description)
+        new_request_data.appendlist('content', new_policy)
 
         serializer = PolicySerializer(policy, data=new_request_data)
-        import ipdb
-        ipdb.set_trace()
 
-        #if serializer.is_valid():
-        #    serializer.save()
+        if serializer.is_valid():
+            serializer.save()
+
+            # update policy in PAP/PDP
+            Adapter.update_policy(serializer.data['name'],
+                                  serializer.data['description'],
+                                  serializer.data['content'])
+
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
