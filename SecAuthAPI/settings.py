@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'SecAuthAPI.Core',
-    'SecAuthAPI.Util',
     'SecAuthAPI.API',
 ]
 
@@ -145,7 +144,7 @@ STATICFILES_FINDERS = (
 )
 
 # Authorization Server (AS)
-as_product = 0     # 0- None, 1- WSO2 IS, 2-AuthZForce
+as_product = 1     # 0- None, 1- WSO2 IS, 2-AuthZForce
 as_api_url = 'https://localhost:9443/'
 as_authtype = 1    # 1- Basic (user/password), 2- OAuth Token
 as_user = 'admin'

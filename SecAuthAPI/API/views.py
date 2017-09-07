@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from SecAuthAPI.API.serializers import PolicySerializer
 from SecAuthAPI.Core.models import Policy
 from SecAuthAPI.PDPAdapter.adapter import Adapter
+from django.http import QueryDict
 
 
 class PolicyViewSet(viewsets.ModelViewSet):
@@ -21,7 +22,7 @@ def policy_list(request):
     Insert (POST) or List all policies (GET)
     """
     if request.method == 'GET':
-        snippets = Policy.objects.all()
+        snippets = Policy.objects.all()  # all policies
         serializer = PolicySerializer(snippets, many=True)
         return Response(serializer.data)
 
@@ -30,10 +31,10 @@ def policy_list(request):
         if serializer.is_valid():
             serializer.save()
 
-            # add policy in PAP/PDP
-            Adapter.add_policy(serializer.data['name'],
-                               serializer.data['description'],
-                               serializer.data['content'])
+            # add policy in PAP/PDP     # TODO: refactory (name in url)
+            Adapter.create_policy(serializer.data['name'],
+                                  serializer.data['description'],
+                                  serializer.data['content'])
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -50,7 +51,7 @@ def policy_detail(request, policy_name):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PolicySerializer(policy)
+        serializer = PolicySerializer(policy)   # one policy
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -74,3 +75,38 @@ def policy_detail(request, policy_name):
         policy.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['PUT'])
+def policy_modify_attribute(request, policy_name, rule_name, attribute_name):
+    """
+    Modify attribute on XACML Policy rule
+
+    :param request: additional data (category_id, attribute_value)
+    :param policy_name: Policy Name on PAP
+    :param rule_name: Rule name on Policy
+    :param attribute_name: Attribute name on Rule
+    :return: HTTP 204 on success (no data)
+    """
+
+    try:
+        policy = Policy.objects.get(name=policy_name)
+    except Policy.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        # change policy
+
+
+        # refaz request.data (querydict)
+        new_request_data = QueryDict(mutable=True)
+        new_request_data.appendlist('name', '')
+        new_request_data.appendlist('description', '')
+        new_request_data.appendlist('content', '')
+
+        serializer = PolicySerializer(policy, data=new_request_data)
+        import ipdb
+        ipdb.set_trace()
+
+        #if serializer.is_valid():
+        #    serializer.save()
