@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
+
 from django.db import models
-from SecAuthAPI.Util.xacml import Util
+
+from SecAuthAPI.Core.xacml import Util
 
 
 class Policy(models.Model):
