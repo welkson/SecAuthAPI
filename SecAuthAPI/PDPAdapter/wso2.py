@@ -34,19 +34,29 @@ class WSO2(AuthService):
     def connection(self):
         url_api = self.url + 'services/EntitlementPolicyAdminService?wsdl'
         client = Client(url_api, username=self.user, password=self.password)    # TODO: token
+
         return client
 
     def get_policy(self):
         # getAllPolicies parameters: policyTypeFilter, policySearchString, pageNumber, isPDPPolicy
         return self.connection().service.getAllPolicies("ALL", "*", 1, False).policySet   # TODO: standardize result
 
-    def create_policy(self, content):
+    def create_policy(self, name, content):
         client = self.connection()
 
         policy_dto = client.factory.create("ax2337:PolicyDTO")  # DTO from WSDL Schema
         policy_dto.active = True
         policy_dto.policy = content
-        policy_dto.promote = True
+        policy_dto.promote = True   # TODO: test
+
+        # import ipdb
+        # ipdb.set_trace()
+
+#        client.service.dePromotePolicy(name)
+
+#        p = client.service.addPolicy(policy_dto)
+
+ #       client.service.publishToPDP(name, "CREATE", "1", True, "0")
 
         return client.service.addPolicy(policy_dto)
 

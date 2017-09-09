@@ -80,7 +80,7 @@ def policy_detail(request, policy_name):
 
 
 @api_view(['PUT'])
-def policy_modify_attribute(request, policy_name, rule_name, attribute_name):
+def policy_modify_attribute(request, policy_name, rule_name):
     """
     Modify attribute on XACML Policy rule
 
@@ -98,7 +98,7 @@ def policy_modify_attribute(request, policy_name, rule_name, attribute_name):
 
     if request.method == 'PUT':
         # change policy
-        new_policy = Xacml.modify_attribute_value(policy.content, rule_name, attribute_name, request.data['attribute_value'])
+        new_policy = Xacml.modify_attribute_value(policy.content, rule_name, request.data['attribute_name'], request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)

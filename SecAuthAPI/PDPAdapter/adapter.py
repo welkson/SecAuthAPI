@@ -7,7 +7,7 @@ class Adapter:
     def create_policy(name, description, content):
         if settings.as_product == 1:                                     # WSO2 (TODO: constants?)
             # Add new Policy
-            return WSO2().create_policy(content)
+            return WSO2().create_policy(name, content)
 
         elif settings.as_product == 2:                                  # AuthZForce
             return NotImplemented
