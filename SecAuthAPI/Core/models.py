@@ -9,6 +9,7 @@ class Policy(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100, null=True)
     content = models.TextField()
+    version = models.SmallIntegerField(default=0)
 
     class Meta:
         verbose_name = "Policy"
@@ -19,4 +20,5 @@ class Policy(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = Xacml.get_policy_name(self.content)  # retrieve policy name from xacml file
+        self.version += 1                                # increment policy version
         super(Policy, self).save(*args, **kwargs)

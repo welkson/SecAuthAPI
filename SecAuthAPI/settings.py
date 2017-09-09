@@ -156,9 +156,10 @@ STATICFILES_FINDERS = (
 )
 
 # Authorization Server (AS)
-as_product = 1     # 0- None, 1- WSO2 IS, 2-AuthZForce
+as_product = 2      # 0- None, 1- WSO2 IS, 2- AuthZForce
 as_api_url = 'https://localhost:9443/'
-as_authtype = 1    # 1- Basic (user/password), 2- OAuth Token
+as_authtype = 1     # 1- Basic (user/password), 2- OAuth Token
 as_user = 'admin'
 as_password = 'admin'
 as_token = ''
+as_domain = 'e0s6apVmEeeqaQJCrBEAAg'  # AuthZForce requires domain
