@@ -1,0 +1,13 @@
+<ns4:PolicySet
+	xmlns="http://authzforce.github.io/rest-api-model/xmlns/authz/5"
+	xmlns:ns2="http://www.w3.org/2005/Atom"
+	xmlns:ns3="http://authzforce.github.io/core/xmlns/pdp/5.0"
+	xmlns:ns4="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+	xmlns:ns5="http://authzforce.github.io/pap-dao-flat-file/xmlns/properties/3.6" PolicySetId="root" Version="0.1.1" PolicyCombiningAlgId="urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-unless-permit">
+	<ns4:Target/>
+	<ns4:Policy PolicyId="deny-all" Version="0.1.1" RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
+		<ns4:Target/>
+		<ns4:Rule RuleId="deny-all" Effect="Deny"/>
+	</ns4:Policy>
+</ns4:PolicySet>
+

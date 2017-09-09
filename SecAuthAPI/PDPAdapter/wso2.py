@@ -23,6 +23,7 @@ class WSO2(AuthService):
             self.user = kwargs.get('user')
             self.password = kwargs.get('password')
             self.token = kwargs.get('token')
+            self.domain = kwargs.get('domain')
         else:
             # get conf from settings.py
             self.url = settings.as_api_url
@@ -30,6 +31,7 @@ class WSO2(AuthService):
             self.user = settings.as_user
             self.password = settings.as_password
             self.token = settings.as_token
+            self.domain = settings.domain
 
     def connection(self):
         url_api = self.url + 'services/EntitlementPolicyAdminService?wsdl'
