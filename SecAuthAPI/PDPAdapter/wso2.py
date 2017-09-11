@@ -23,7 +23,6 @@ class WSO2(AuthService):
             self.user = kwargs.get('user')
             self.password = kwargs.get('password')
             self.token = kwargs.get('token')
-            self.domain = kwargs.get('domain')
         else:
             # get conf from settings.py
             self.url = settings.as_api_url
@@ -31,7 +30,6 @@ class WSO2(AuthService):
             self.user = settings.as_user
             self.password = settings.as_password
             self.token = settings.as_token
-            self.domain = settings.domain
 
     def connection(self):
         url_api = self.url + 'services/EntitlementPolicyAdminService?wsdl'
@@ -46,7 +44,8 @@ class WSO2(AuthService):
     def create_policy(self, name, content):
         client = self.connection()
 
-        policy_dto = client.factory.create("ax2337:PolicyDTO")  # DTO from WSDL Schema
+        # TODO: capture namespace version automatically (e.g. 2337, 2340)
+        policy_dto = client.factory.create("ax2340:PolicyDTO")  # DTO from WSDL Schema
         policy_dto.active = True
         policy_dto.policy = content
         policy_dto.promote = True   # TODO: test
@@ -54,18 +53,18 @@ class WSO2(AuthService):
         # import ipdb
         # ipdb.set_trace()
 
-#        client.service.dePromotePolicy(name)
+#       client.service.dePromotePolicy(name)
 
-#        p = client.service.addPolicy(policy_dto)
+#       p = client.service.addPolicy(policy_dto)
 
- #       client.service.publishToPDP(name, "CREATE", "1", True, "0")
+#       client.service.publishToPDP(name, "CREATE", "1", True, "0")
 
         return client.service.addPolicy(policy_dto)
 
     def update_policy(self, content):
         client = self.connection()
 
-        policy_dto = client.factory.create("ax2337:PolicyDTO")  # DTO from WSDL Schema
+        policy_dto = client.factory.create("ax2340:PolicyDTO")  # DTO from WSDL Schema
         policy_dto.active = True
         policy_dto.policy = content
         policy_dto.promote = True
