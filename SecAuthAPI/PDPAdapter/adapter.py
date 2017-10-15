@@ -44,4 +44,11 @@ class Adapter:
     def get_policy(name):
         return NotImplemented
 
+    @staticmethod
+    def clear_cache():
+        if settings.as_product == 1:                                     # WSO2 (TODO: constants?)
+            # Clear PAP/PDP cache
+            return WSO2().clear_cache()
+
+
 # TODO: method to attribute modify?

@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^policy/$', views.policy_list),
     url(r'^policy/(?P<policy_name>\w+)/$', views.policy_detail),
     url(r'^policy/(?P<policy_name>\w+)/(?P<rule_name>\w+)/$', views.policy_modify_attribute),
+    url(r'^clear_cache/$', views.clear_cache),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

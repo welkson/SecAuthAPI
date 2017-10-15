@@ -79,6 +79,14 @@ def policy_detail(request, policy_name):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET'])
+def clear_cache(request):
+    if request.method == 'GET':
+        Adapter.clear_cache()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['PUT'])
 def policy_modify_attribute(request, policy_name, rule_name):
     """

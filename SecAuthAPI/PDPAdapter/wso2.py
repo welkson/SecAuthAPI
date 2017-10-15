@@ -37,11 +37,34 @@ class WSO2(AuthService):
 
         return client
 
+    # workaround to fix bug in WSO2 PAP/PDP Cache
+    # details:
+    # https://stackoverflow.com/questions/46626886/bug-cache-in-wso2-pdp-when-policy-is-created-via-admin-services-api
+    def clear_cache(self):
+        url_admin_api = self.url + '/services/EntitlementAdminService?wsdl'
+        client_admin_api = Client(url_admin_api, username=self.user, password=self.password)
+        client_admin_api.service.clearPolicyCache()
+        client_admin_api.service.clearDecisionCache()
+        #
+        # client_admin_api.service.refreshPolicyFinders()
+        # client_admin_api.service.refreshResourceFinder()
+        #
+        # client_admin_api.service.clearAllAttributeCaches()
+        # client_admin_api.service.clearAllResourceCaches()
+        # client_admin_api.service.clearAttributeFinderCache()
+        #
+        # client_admin_api.service.clearCarbonAttributeCache()
+        # client_admin_api.service.clearCarbonResourceCache()
+        #
+        return
+
     def get_policy(self):
         # getAllPolicies parameters: policyTypeFilter, policySearchString, pageNumber, isPDPPolicy
         return self.connection().service.getAllPolicies("ALL", "*", 1, False).policySet   # TODO: standardize result
 
     def create_policy(self, name, content):
+        self.clear_cache()  # workaround to fix bug in PAP/PDP cache
+
         client = self.connection()
 
         # TODO: capture namespace version automatically (e.g. 2337, 2340)
@@ -49,17 +72,9 @@ class WSO2(AuthService):
         policy_dto.active = True
         policy_dto.policy = content
         policy_dto.promote = True   # TODO: test
+        policy = client.service.addPolicy(policy_dto)
 
-        # import ipdb
-        # ipdb.set_trace()
-
-#       client.service.dePromotePolicy(name)
-
-#       p = client.service.addPolicy(policy_dto)
-
-#       client.service.publishToPDP(name, "CREATE", "1", True, "0")
-
-        return client.service.addPolicy(policy_dto)
+        return policy
 
     def update_policy(self, content):
         client = self.connection()
@@ -69,11 +84,13 @@ class WSO2(AuthService):
         policy_dto.policy = content
         policy_dto.promote = True
 
-        return client.service.updatePolicy(policy_dto)
+        policy = client.service.updatePolicy(policy_dto)
+        self.clear_cache()  # workaround to fix bug in PAP/PDP cache
+
+        return policy
 
     def delete_policy(self, name):
         self.connection().service.removePolicy(name, True)  # PolicyID, dePromote
+        self.clear_cache()  # workaround to fix bug in PAP/PDP cache
 
         return True     # TODO: return error or successful result
-
-# TODO: WSO2 apply police (refresh? restart service?)
