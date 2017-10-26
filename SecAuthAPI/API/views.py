@@ -20,11 +20,12 @@ class PolicyViewSet(viewsets.ModelViewSet):
 @api_view(['GET', 'POST'])
 def policy_list(request):
     """
-    Insert (POST) or List all policies (GET)
+    List all policies (GET) or Insert (POST) a new policy
     """
     if request.method == 'GET':
         snippets = Policy.objects.all()  # all policies
         serializer = PolicySerializer(snippets, many=True)
+
         return Response(serializer.data)
 
     elif request.method == 'POST':
@@ -45,7 +46,7 @@ def policy_list(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def policy_detail(request, policy_name):
     """
-    Retrieve, update or delete a policy instance
+    Retrieve (GET) or delete (DELETE) a policy instance
     """
     try:
         policy = Policy.objects.get(name=policy_name)
