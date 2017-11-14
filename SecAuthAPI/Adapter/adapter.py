@@ -1,6 +1,7 @@
-from SecAuthAPI.PDPAdapter.wso2 import WSO2
-from SecAuthAPI.PDPAdapter.authzforce import AuthZForce
+from SecAuthAPI.Adapter.wso2 import WSO2
+from SecAuthAPI.Adapter.authzforce import AuthZForce
 from SecAuthAPI import settings
+from SecAuthAPI.Core.xacml import Xacml
 
 
 class Adapter:
@@ -49,6 +50,12 @@ class Adapter:
         if settings.as_product == 1:                                     # WSO2 (TODO: constants?)
             # Clear PAP/PDP cache
             return WSO2().clear_cache()
+
+    @staticmethod
+    def modify_policy_attribute_value(policy, rule_name, attribute_name, attribute_value):
+        print "<<<< passo 1 %s " % attribute_name
+        return Xacml.modify_attribute_value(policy, rule_name, attribute_name, attribute_value)
+
 
 
 # TODO: method to attribute modify?
