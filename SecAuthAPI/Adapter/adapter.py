@@ -53,7 +53,6 @@ class Adapter:
 
     @staticmethod
     def modify_policy_attribute_value(policy, rule_name, attribute_name, attribute_value):
-        print "<<<< passo 1 %s " % attribute_name
         return Xacml.modify_attribute_value(policy, rule_name, attribute_name, attribute_value)
 
 

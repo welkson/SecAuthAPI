@@ -64,8 +64,6 @@ class Xacml:
 
     @staticmethod
     def modify_attribute_value(policy, rule_name, attribute_name, attribute_value):
-        print "<<<< passo 2 %s " % attribute_name
-
         # convert xacml to Dict
         policy_dic = xmltodict.parse(policy)
 
