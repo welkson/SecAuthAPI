@@ -96,7 +96,6 @@ def policy_modify_attribute(request, policy_name, rule_name):
     :param request: additional data (category_id, attribute_value)
     :param policy_name: Policy Name on PAP
     :param rule_name: Rule name on Policy
-    :param attribute_name: Attribute name on Rule
     :return: HTTP 204 on success (no data)
     """
 
@@ -107,8 +106,8 @@ def policy_modify_attribute(request, policy_name, rule_name):
 
     if request.method == 'PUT':
         # change policy
-        new_policy = Adapter.modify_policy_attribute_value(policy.content, rule_name, request.data['attribute_name'],
-                                                           request.data['attribute_value'])
+        new_policy = Adapter.modify_policy_attribute(policy.content, rule_name, request.data['attribute_name'],
+                                                     request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)

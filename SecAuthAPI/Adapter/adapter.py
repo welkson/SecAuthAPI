@@ -52,9 +52,13 @@ class Adapter:
             return WSO2().clear_cache()
 
     @staticmethod
-    def modify_policy_attribute_value(policy, rule_name, attribute_name, attribute_value):
-        return Xacml.modify_attribute_value(policy, rule_name, attribute_name, attribute_value)
+    def modify_policy_attribute(policy, rule_name, attribute_name, attribute_value):
+        return Xacml.modify_attribute(policy, rule_name, attribute_name, attribute_value)
 
+
+    @staticmethod
+    def add_policy_attribute(policy, rule_name, category_id, attribute_name, attribute_value):
+        return Xacml.add_attribute(policy, rule_name, category_id, attribute_name, attribute_value)
 
 
 # TODO: method to attribute modify?

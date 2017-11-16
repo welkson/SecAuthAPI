@@ -63,7 +63,7 @@ class Xacml:
             return {'IsValid': False}, {'message': schema.error_log}
 
     @staticmethod
-    def modify_attribute_value(policy, rule_name, attribute_name, attribute_value):
+    def modify_attribute(policy, rule_name, attribute_name, attribute_value):
         # convert xacml to Dict
         policy_dic = xmltodict.parse(policy)
 
@@ -77,3 +77,7 @@ class Xacml:
 
         # convert from dict to xacml and return the policy
         return xmltodict.unparse(policy_dic, full_document=False, pretty=True, depth=0, indent="    ")
+
+    @staticmethod
+    def add_attribute(policy, rule_name, category_id, attribute_name, attribute_value):
+        pass
