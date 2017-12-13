@@ -23,6 +23,9 @@ urlpatterns = [
     url(r'^policy/(?P<policy_name>\w+)/(?P<rule_name>\w+)/$', views.policy_modify_attribute),
     url(r'^clear_cache/$', views.clear_cache),
 
+    # OAuth
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)

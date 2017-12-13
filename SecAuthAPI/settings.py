@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'SecAuthAPI.Core',
     'SecAuthAPI.API',
+    'oauth2_provider',
 ]
 
 REST_FRAMEWORK = {
