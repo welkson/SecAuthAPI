@@ -17,6 +17,14 @@ class PolicyViewSet(viewsets.ModelViewSet):
     serializer_class = PolicySerializer
 
 
+@api_view(['GET'])
+def clear_cache(request):
+    if request.method == 'GET':
+        Adapter.clear_cache()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET', 'POST'])
 def policy_list(request):
     """
@@ -80,14 +88,6 @@ def policy_detail(request, policy_name):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET'])
-def clear_cache(request):
-    if request.method == 'GET':
-        Adapter.clear_cache()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 @api_view(['PUT'])
 def policy_modify_attribute(request, policy_name, rule_name):
     """
@@ -127,3 +127,18 @@ def policy_modify_attribute(request, policy_name, rule_name):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# TODO: attribute_name is broken in URL parameter (special chars)
+@api_view(['POST'])
+def policy_add_attribute(request, policy_name, rule_name, attribute_name):
+    """
+    Add attribute on XACML Policy rule
+
+    :param request: additional data (category_id, attribute_value)
+    :param policy_name: Policy Name on PAP
+    :param rule_name: Rule name on Policy
+    :param attribute_name: Attribute name on Policy
+    :return: HTTP 204 on success (no data)
+    """
+    pass

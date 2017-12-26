@@ -68,7 +68,7 @@ class WSO2(AuthService):
         client = self.connection()
 
         # TODO: capture namespace version automatically (e.g. 2337, 2340)
-        policy_dto = client.factory.create("ax2340:PolicyDTO")  # DTO from WSDL Schema
+        policy_dto = client.factory.create("ns0:PolicyDTO")  # DTO from WSDL Schema
         policy_dto.active = True
         policy_dto.policy = content
         policy_dto.promote = True   # TODO: test
@@ -79,7 +79,7 @@ class WSO2(AuthService):
     def update_policy(self, content):
         client = self.connection()
 
-        policy_dto = client.factory.create("ax2340:PolicyDTO")  # DTO from WSDL Schema
+        policy_dto = client.factory.create("ns0:PolicyDTO")  # DTO from WSDL Schema
         policy_dto.active = True
         policy_dto.policy = content
         policy_dto.promote = True
