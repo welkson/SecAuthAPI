@@ -6,6 +6,7 @@ import xmltodict
 import json
 from BeautifulSoup import BeautifulStoneSoup as Soup
 from functools import reduce
+from SecAuthAPI.Core.GenerateDS_XACML import xacml_wd17 as gds_xacml
 import operator
 
 
@@ -15,6 +16,19 @@ def get_from_dict(data_dict, keys):
 
 def set_in_dict(data_dict, keys, value):
     get_from_dict(data_dict, keys[:-1])[keys[-1]] = value
+
+
+def gen_xacml_add_attribute(match_id, attribute_value, category, attribute_id):
+    attr_template = """<AnyOf>
+        <AllOf>
+            <Match MatchId="%s">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">%s</AttributeValue>
+                <AttributeDesignator Category="%s" AttributeId="%s" DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"></AttributeDesignator>
+            </Match>
+        </AllOf>
+    </AnyOf>""" % (match_id, attribute_value, category, attribute_id)
+
+    return attr_template
 
 
 class Xacml:
@@ -79,5 +93,6 @@ class Xacml:
         return xmltodict.unparse(policy_dic, full_document=False, pretty=True, depth=0, indent="    ")
 
     @staticmethod
-    def add_attribute(policy, rule_name, category_id, attribute_name, attribute_value):
-        pass
+    def add_atribute(policy, rule_name, match_id, attribute_value, category, attribute_id):
+        new_attr = gen_xacml_add_attribute(match_id, attribute_value, category, attribute_id)
+        
