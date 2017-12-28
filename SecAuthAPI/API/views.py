@@ -109,16 +109,24 @@ def policy_attribute(request, policy_name, rule_name):
         new_policy = Xacml.add_atribute(policy.content, rule_name, request.data['category'],
                                         request.data['attribute_name'], request.data['attribute_value'])
 
-        import sys
-        print "<<<<<<< \n\n\n\n\n", new_policy.export(sys.stdout, 0, namespace_='')
+        # define fields in request.data to serialize (querydict)
+        new_request_data = QueryDict(mutable=True)
+        new_request_data.appendlist('name', policy_name)
+        new_request_data.appendlist('description', policy.description)
+        new_request_data.appendlist('content', new_policy)
+        serializer = PolicySerializer(policy, data=new_request_data)
 
+        if serializer.is_valid():
+            serializer.save()
 
+            # update policy in PAP
+            Adapter.update_policy(serializer.data['name'],
+                                  serializer.data['description'],
+                                  serializer.data['content'])
 
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-
-
-
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # modify attribute
     elif request.method == 'PUT':
@@ -136,7 +144,7 @@ def policy_attribute(request, policy_name, rule_name):
         if serializer.is_valid():
             serializer.save()
 
-            # update policy in PAP/PDP
+            # update policy in PAP
             Adapter.update_policy(serializer.data['name'],
                                   serializer.data['description'],
                                   serializer.data['content'])

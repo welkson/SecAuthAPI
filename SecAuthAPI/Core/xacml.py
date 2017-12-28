@@ -4,9 +4,11 @@ from lxml import etree
 from collections import OrderedDict
 import xmltodict
 import json
+import sys
 from BeautifulSoup import BeautifulStoneSoup as Soup
 from functools import reduce
 from SecAuthAPI.Core.GenerateDS_XACML import xacml_wd17 as gds_xacml
+from StringIO import StringIO   # TODO: py3 -> from io import StringIO
 import operator
 
 
@@ -94,10 +96,6 @@ class Xacml:
 
     @staticmethod
     def add_atribute(policy, rule_name, category_id, attribute_name, attribute_value):
-        import ipdb
-        ipdb.set_trace()
-
-
         # policy model from string
         p = gds_xacml.parseString(policy, silence=True)
 
@@ -116,5 +114,14 @@ class Xacml:
         # add new attribute
         t1.add_AnyOf(new_attribute)
 
-        return p
+        # export xacml model to string
+        try:
+            old_stdout = sys.stdout
+            result = StringIO()
+            sys.stdout = result
+            p.export(sys.stdout, 0, namespace_='')
 
+        finally:
+            sys.stdout = old_stdout
+
+        return result.getvalue()
