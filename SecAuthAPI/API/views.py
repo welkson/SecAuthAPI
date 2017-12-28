@@ -88,10 +88,10 @@ def policy_detail(request, policy_name):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['PUT'])
-def policy_modify_attribute(request, policy_name, rule_name):
+@api_view(['POST', 'PUT', 'DELETE'])
+def policy_attribute(request, policy_name, rule_name):
     """
-    Modify attribute on XACML Policy rule
+    Add, Modify and Delete attribute on XACML Policy rule
 
     :param request: additional data (category_id, attribute_value)
     :param policy_name: Policy Name on PAP
@@ -104,10 +104,27 @@ def policy_modify_attribute(request, policy_name, rule_name):
     except Policy.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'PUT':
+    # add attribute
+    if request.method == 'POST':
+        new_policy = Xacml.add_atribute(policy.content, rule_name, request.data['category'],
+                                        request.data['attribute_name'], request.data['attribute_value'])
+
+        import sys
+        print "<<<<<<< \n\n\n\n\n", new_policy.export(sys.stdout, 0, namespace_='')
+
+
+
+
+
+
+
+
+
+    # modify attribute
+    elif request.method == 'PUT':
         # change policy
-        new_policy = Adapter.modify_policy_attribute(policy.content, rule_name, request.data['attribute_name'],
-                                                     request.data['attribute_value'])
+        new_policy = Xacml.modify_attribute(policy.content, rule_name, request.data['attribute_name'],
+                                            request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)
@@ -127,18 +144,3 @@ def policy_modify_attribute(request, policy_name, rule_name):
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# TODO: attribute_name is broken in URL parameter (special chars)
-@api_view(['POST'])
-def policy_add_attribute(request, policy_name, rule_name, attribute_name):
-    """
-    Add attribute on XACML Policy rule
-
-    :param request: additional data (category_id, attribute_value)
-    :param policy_name: Policy Name on PAP
-    :param rule_name: Rule name on Policy
-    :param attribute_name: Attribute name on Policy
-    :return: HTTP 204 on success (no data)
-    """
-    pass

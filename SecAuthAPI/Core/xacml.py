@@ -18,15 +18,15 @@ def set_in_dict(data_dict, keys, value):
     get_from_dict(data_dict, keys[:-1])[keys[-1]] = value
 
 
-def gen_xacml_add_attribute(match_id, attribute_value, category, attribute_id):
+def gen_xacml_add_attribute(category, attribute_id, attribute_value):
     attr_template = """<AnyOf>
         <AllOf>
-            <Match MatchId="%s">
+            <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
                 <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">%s</AttributeValue>
                 <AttributeDesignator Category="%s" AttributeId="%s" DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true"></AttributeDesignator>
             </Match>
         </AllOf>
-    </AnyOf>""" % (match_id, attribute_value, category, attribute_id)
+    </AnyOf>""" % (attribute_value, category, attribute_id)
 
     return attr_template
 
@@ -93,6 +93,28 @@ class Xacml:
         return xmltodict.unparse(policy_dic, full_document=False, pretty=True, depth=0, indent="    ")
 
     @staticmethod
-    def add_atribute(policy, rule_name, match_id, attribute_value, category, attribute_id):
-        new_attr = gen_xacml_add_attribute(match_id, attribute_value, category, attribute_id)
-        
+    def add_atribute(policy, rule_name, category_id, attribute_name, attribute_value):
+        import ipdb
+        ipdb.set_trace()
+
+
+        # policy model from string
+        p = gds_xacml.parseString(policy, silence=True)
+
+        # generate attribute xml string
+        new_attr_str = gen_xacml_add_attribute(category_id, attribute_name, attribute_value)
+
+        # generate xml/xacml object from string
+        new_attribute = gds_xacml.parseString(new_attr_str, silence=True)
+
+        # get Rule tag
+        r1 = p.get_Rule()[0]    # TODO: retrive rule from rule_name
+
+        # get Target from Rule
+        t1 = r1.get_Target()
+
+        # add new attribute
+        t1.add_AnyOf(new_attribute)
+
+        return p
+

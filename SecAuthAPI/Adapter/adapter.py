@@ -50,15 +50,3 @@ class Adapter:
         if settings.as_product == 1:                                     # WSO2 (TODO: constants?)
             # Clear PAP/PDP cache
             return WSO2().clear_cache()
-
-    @staticmethod
-    def modify_policy_attribute(policy, rule_name, attribute_name, attribute_value):
-        return Xacml.modify_attribute(policy, rule_name, attribute_name, attribute_value)
-
-
-    @staticmethod
-    def add_policy_attribute(policy, rule_name, category_id, attribute_name, attribute_value):
-        return Xacml.add_attribute(policy, rule_name, category_id, attribute_name, attribute_value)
-
-
-# TODO: method to attribute modify?

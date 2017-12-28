@@ -20,7 +20,7 @@ urlpatterns = [
     # REST API
     url(r'^policy/$', views.policy_list),
     url(r'^policy/(?P<policy_name>\w+)/$', views.policy_detail),
-    url(r'^policy/(?P<policy_name>\w+)/(?P<rule_name>\w+)/$', views.policy_modify_attribute),
+    url(r'^policy/(?P<policy_name>\w+)/(?P<rule_name>\w+)/$', views.policy_attribute),
     url(r'^clear_cache/$', views.clear_cache),
 
     # OAuth
