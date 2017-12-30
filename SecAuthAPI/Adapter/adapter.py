@@ -1,7 +1,7 @@
 from SecAuthAPI.Adapter.wso2 import WSO2
 from SecAuthAPI.Adapter.authzforce import AuthZForce
 from SecAuthAPI import settings
-from SecAuthAPI.Core.xacml import Xacml
+from SecAuthAPI.Core.xacml_util import Xacml
 
 
 class Adapter:

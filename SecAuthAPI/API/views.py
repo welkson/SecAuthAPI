@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from SecAuthAPI.API.serializers import PolicySerializer
 from SecAuthAPI.Core.models import Policy
-from SecAuthAPI.Core.xacml import Xacml
+from SecAuthAPI.Core.xacml_util import Xacml
 from SecAuthAPI.Adapter.adapter import Adapter
 from django.http import QueryDict
 
