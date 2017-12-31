@@ -41,7 +41,7 @@ Supporting the Self-adaptation of Authorization Infrastructures. Available from:
 
 ## Contributors
 
-Welkson Medeiros - <welkson.medeiros@ifrn.edu.br>
+Welkson Renny de Medeiros - <welkson.medeiros@ifrn.edu.br>
 
 Carlos Eduardo da Silva - <kaduardo@imd.ufrn.edu.br>
 
