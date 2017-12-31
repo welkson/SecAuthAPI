@@ -10,8 +10,8 @@ Supporting the Self-adaptation of Authorization Infrastructures. Available from:
 ## Motivation
 
 Insiders pose a great threat to organizations due to their capacity of exploiting privileged access for inappropriate gain. 
-Traditional access controlsolutions are not able to deal with insiders, and some solutions apply concepts of 
-self-adaptation to handle such problems. Existing  work  has  been  focused on detecting or how to respond to a detected 
+Traditional access control solutions are not able to deal with insiders, and some solutions apply concepts of 
+self-adaptation to handle such problems. Existing  work has been focused on detecting or how to respond to a detected 
 insider.  However, in order to allow the dynamic adaptation of access control policies, it is necessary to clearly
 specify what modification actions can be applied to a policy.  Such actions can then be used for the definition of 
 adaptation plans. 
