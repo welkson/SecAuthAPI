@@ -49,7 +49,6 @@ class XACML(object):
                         values = [values,]
                     for value in values:
                         any_of.add_all_of(load_all_of(value, parent=any_of))
-
             return any_of
 
         def load_all_of(items, parent):
@@ -62,7 +61,6 @@ class XACML(object):
                     match = load_match(value, parent=all_of)
                     policy.aux_matchs.append(match)
                     all_of.add_match(match)
-
             return all_of
 
         def load_match(items, parent):
@@ -100,7 +98,6 @@ class XACML(object):
                 policy.add_rule(rule=rule)
             else:
                 policy.add_target(load_target(value, policy))
-
         return policy
 
 
@@ -161,7 +158,6 @@ class Attribute(BaseItem):
 
     def __getitem__(self, item):
         return self.properties[item]
-
 
 
 class Policy(BaseItem):

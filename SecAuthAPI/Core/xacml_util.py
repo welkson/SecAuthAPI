@@ -15,7 +15,7 @@ class XacmlUtil:
 
     def validate_policy(self):
         # validating XACML from XSD
-        schema = etree.XMLSchema(file='xacml-core-v3-schema-wd-17.xsd')  # TODO: fix path (extra folder?)
+        schema = etree.XMLSchema(file='xacml-core-v3-schema-wd-17.xsd')       # TODO: fix path (extra folder?)
         xml_doc = etree.fromstring(self.content)
         if schema.validate(xml_doc):
             return {'IsValid': True}, {'message': 'Policy is Valid!'}
@@ -23,8 +23,10 @@ class XacmlUtil:
             return {'IsValid': False}, {'message': schema.error_log}
 
     def add_atribute(self, rule_name, category_id, attribute_name, attribute_value):
+        import ipdb; ipdb.set_trace()
+
         # get attribute from target
-        target = self.policy.rules[0].targets[0]    # TODO: use rule_name
+        target = self.policy.rules[0].targets[0]                              # TODO: use rule_name
 
         anyof = AnyOf(parent=target)
         allof = AllOf(parent=anyof)
@@ -56,5 +58,7 @@ class XacmlUtil:
 
         return self.policy
 
-    def remove_attribute(self, rule_name, attribute_name):
-        return self.policy.remove_any_of_by_name(attribute_name)  # TODO: use rule_name
+    def remove_attribute(self, rule_name, attribute_name):                    # TODO: use rule_name
+        self.policy.remove_any_of_by_name(attribute_name)
+
+        return self.policy

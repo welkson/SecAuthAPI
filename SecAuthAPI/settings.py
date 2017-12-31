@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
     ],
@@ -158,7 +161,7 @@ STATICFILES_FINDERS = (
 
 # Authorization Server (AS)
 #  WSO Example
-as_product = 1      # 0- None, 1- WSO2 IS, 2- AuthZForce
+as_product = 0      # 0- None, 1- WSO2 IS, 2- AuthZForce
 as_api_url = 'https://localhost:9443/'
 as_authtype = 1     # 1- Basic (user/password), 2- OAuth Token
 as_user = 'admin'

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from SecAuthAPI.Core.xacml_util import Xacml
+from SecAuthAPI.Core.xacml_util import XacmlUtil
 
 
 class Policy(models.Model):
@@ -19,6 +19,6 @@ class Policy(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.name = Xacml.get_policy_name(self.content)  # retrieve policy name from xacml file
+        self.name = XacmlUtil(content=self.content).get_policy_name()  # retrieve policy name from xacml file
         self.version += 1                                # increment policy version
         super(Policy, self).save(*args, **kwargs)

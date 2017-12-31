@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from SecAuthAPI.API.serializers import PolicySerializer
 from SecAuthAPI.Core.models import Policy
-from SecAuthAPI.Core.xacml_util import Xacml
+from SecAuthAPI.Core.xacml_util import XacmlUtil
 from SecAuthAPI.Adapter.adapter import Adapter
 from django.http import QueryDict
 
@@ -106,14 +106,15 @@ def policy_attribute(request, policy_name, rule_name):
 
     # add attribute
     if request.method == 'POST':
-        new_policy = Xacml.add_atribute(policy.content, rule_name, request.data['category'],
-                                        request.data['attribute_name'], request.data['attribute_value'])
+        new_policy = XacmlUtil(content=policy.content).add_atribute(rule_name, request.data['category'],
+                                                                    request.data['attribute_name'],
+                                                                    request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)
         new_request_data.appendlist('name', policy_name)
         new_request_data.appendlist('description', policy.description)
-        new_request_data.appendlist('content', new_policy)
+        new_request_data.appendlist('content', new_policy.toXML())
         serializer = PolicySerializer(policy, data=new_request_data)
 
         if serializer.is_valid():
@@ -131,14 +132,37 @@ def policy_attribute(request, policy_name, rule_name):
     # modify attribute
     elif request.method == 'PUT':
         # change policy
-        new_policy = Xacml.modify_attribute(policy.content, rule_name, request.data['attribute_name'],
-                                            request.data['attribute_value'])
+        new_policy = XacmlUtil(content=policy.content).modify_attribute(rule_name, request.data['attribute_name'],
+                                                                        request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)
         new_request_data.appendlist('name', policy_name)
         new_request_data.appendlist('description', policy.description)
-        new_request_data.appendlist('content', new_policy)
+        new_request_data.appendlist('content', new_policy.toXML())
+        serializer = PolicySerializer(policy, data=new_request_data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            # update policy in PAP
+            Adapter.update_policy(serializer.data['name'],
+                                  serializer.data['description'],
+                                  serializer.data['content'])
+
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # remove attribute
+    elif request.method == 'DELETE':
+        new_policy = XacmlUtil(content=policy.content).remove_attribute(rule_name, request.data['attribute_name'])
+
+        # define fields in request.data to serialize (querydict)
+        new_request_data = QueryDict(mutable=True)
+        new_request_data.appendlist('name', policy_name)
+        new_request_data.appendlist('description', policy.description)
+        new_request_data.appendlist('content', new_policy.toXML())
         serializer = PolicySerializer(policy, data=new_request_data)
 
         if serializer.is_valid():

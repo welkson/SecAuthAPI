@@ -1,10 +1,10 @@
 from SecAuthAPI.Adapter.wso2 import WSO2
 from SecAuthAPI.Adapter.authzforce import AuthZForce
 from SecAuthAPI import settings
-from SecAuthAPI.Core.xacml_util import Xacml
 
 
 class Adapter:
+
     @staticmethod
     def create_policy(name, description, content):
         if settings.as_product == 1:                                    # WSO2 (TODO: constants?)

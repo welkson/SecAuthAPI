@@ -1,14 +1,20 @@
 ## Synopsis
 
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
+This application is a generic Application Programming Interface (API) for manipulating access control policy based on Attribute-Based Access Control (ABAC). 
+Our API follows a functional specification of ABAC, and aims to abstract away implementation details of access control 
+engines, providing an effector that can be integrated into a self-adaptation approach.
 
-## Code Example
-
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+Paper: 
+Supporting the Self-adaptation of Authorization Infrastructures. Available from: https://www.researchgate.net/publication/321386327_Supporting_the_Self-adaptation_of_Authorization_Infrastructures [accessed Dec 31 2017].
 
 ## Motivation
 
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+Insiders pose a great threat to organizations due to their capacity of exploiting privileged access for inappropriate gain. 
+Traditional access controlsolutions are not able to deal with insiders, and some solutions apply concepts of 
+self-adaptation to handle such problems. Existing  work  has  been  focused on detecting or how to respond to a detected 
+insider.  However, in order to allow the dynamic adaptation of access control policies, it is necessary to clearly
+specify what modification actions can be applied to a policy.  Such actions can then be used for the definition of 
+adaptation plans. 
 
 ## Installation
 
@@ -16,18 +22,32 @@ A short description of the motivation behind the creation and maintenance of the
 pip install -U -r requirements.txt
 ```
 
+
+## Run SecAuthAPI
+
+```
+python manage.py runserver
+
+at browser: http://127.0.0.1:8000 (API operations)
+            http://127.0.0.1:8000/admin (Dashboard)
+            http://127.0.0.1:8000/o/applications (OAuth register app)
+```
+
 ## API Reference
 
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
+See paper:
+Supporting the Self-adaptation of Authorization Infrastructures. Available from: https://www.researchgate.net/publication/321386327_Supporting_the_Self-adaptation_of_Authorization_Infrastructures [accessed Dec 31 2017].
 
-## Tests
-
-Describe and show how to run the tests with code examples.
 
 ## Contributors
 
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+Welkson Medeiros <welkson.medeiros@ifrn.edu.br>
+
+Carlos Eduardo da Silva <kaduardo@imd.ufrn.edu.br>
+
+Diego Saraiva <diego.saraiva@ifrn.edu.br>
+
 
 ## License
 
-A short snippet describing the license (MIT, Apache, etc.)
+The MIT License (MIT)
