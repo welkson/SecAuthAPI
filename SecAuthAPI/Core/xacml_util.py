@@ -23,8 +23,6 @@ class XacmlUtil:
             return {'IsValid': False}, {'message': schema.error_log}
 
     def add_atribute(self, rule_name, category_id, attribute_name, attribute_value):
-        import ipdb; ipdb.set_trace()
-
         # get attribute from target
         target = self.policy.rules[0].targets[0]                              # TODO: use rule_name
 
