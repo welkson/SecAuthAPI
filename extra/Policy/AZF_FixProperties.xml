@@ -1,0 +1,3 @@
+<pdpPropertiesUpdate xmlns="http://authzforce.github.io/rest-api-model/xmlns/authz/5">
+ <rootPolicyRefExpression>P1</rootPolicyRefExpression>
+</pdpPropertiesUpdate>

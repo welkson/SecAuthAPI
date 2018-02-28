@@ -1,3 +1,4 @@
+# TODO: use FixProperties! Tem que informar na regra root qual o policyset da regra para avaliação
 curl --request "POST" --header "Content-Type: application/xml;charset=UTF-8" \
      --data @Policy/AZF_Root_DenyAll.xml --header "Accept: application/xml" \
      -vL \
