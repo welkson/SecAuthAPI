@@ -10,6 +10,7 @@ class PolicyAdminForm(forms.ModelForm):
     model = Policy
 
     # TODO: XML Formatter
+    # Ref: https://stackoverflow.com/questions/11941971/how-to-override-field-value-display-in-django-admin-change-form
     # def __init__(self, *args, **kwargs):
     #    super(PolicyAdminForm, self).__init__(*args, **kwargs)
     #    self.initial['content'] = None or XacmlUtil(content=self.instance.content).xacml_formatter()
