@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lxml import etree
+import xml.dom.minidom
 from ModelMapper import *
 
 
@@ -60,3 +61,6 @@ class XacmlUtil:
         self.policy.remove_any_of_by_name(attribute_name)
 
         return self.policy
+
+    def xacml_formatter(self):
+        return xml.dom.minidom.parseString(self.content).toprettyxml()
