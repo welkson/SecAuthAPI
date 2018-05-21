@@ -20,5 +20,5 @@ class Policy(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = XacmlUtil(content=self.content).get_policy_name()  # retrieve policy name from xacml file
-        self.version += 1                                # increment policy version
+        self.version += 1                                              # increment policy version
         super(Policy, self).save(*args, **kwargs)
