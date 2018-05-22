@@ -45,10 +45,14 @@ def policy_list(request):
             Adapter.create_policy(serializer.data['name'],
                                   serializer.data['description'],
                                   serializer.data['content'])
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif serializer.errors.has_key('name') \
+                and u'already exists' in serializer.errors.get('name')[0]:
+            return Response(serializer.errors, status=status.HTTP_303_SEE_OTHER)
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -76,7 +80,7 @@ def policy_detail(request, policy_name):
                                   serializer.data['content'])
 
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     elif request.method == 'DELETE':
         # delete policy in PAP/PDP
@@ -106,9 +110,14 @@ def policy_attribute(request, policy_name, rule_name):
 
     # add attribute
     if request.method == 'POST':
-        new_policy = XacmlUtil(content=policy.content).add_atribute(rule_name, request.data['category'],
-                                                                    request.data['attribute_name'],
-                                                                    request.data['attribute_value'])
+        # attribute already exists?
+        xacml_policy = XacmlUtil(content=policy.content)
+        attribute_already_exists = xacml_policy.policy.get_match_by_value(request.data['attribute_name']) is not None
+
+        # add attribute an existing policy
+        new_policy = xacml_policy.add_atribute(rule_name, request.data['category'],
+                                               request.data['attribute_name'],
+                                               request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)
@@ -118,6 +127,9 @@ def policy_attribute(request, policy_name, rule_name):
         serializer = PolicySerializer(policy, data=new_request_data)
 
         if serializer.is_valid():
+            if attribute_already_exists:
+                return Response(serializer.data, status=status.HTTP_303_SEE_OTHER)
+
             serializer.save()
 
             # update policy in PAP
@@ -127,7 +139,7 @@ def policy_attribute(request, policy_name, rule_name):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # modify attribute
     elif request.method == 'PUT':
@@ -152,7 +164,7 @@ def policy_attribute(request, policy_name, rule_name):
 
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # remove attribute
     elif request.method == 'DELETE':
@@ -175,4 +187,4 @@ def policy_attribute(request, policy_name, rule_name):
 
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
