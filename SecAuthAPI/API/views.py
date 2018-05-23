@@ -114,6 +114,9 @@ def policy_attribute(request, policy_name, rule_name):
         xacml_policy = XacmlUtil(content=policy.content)
         attribute_already_exists = xacml_policy.policy.get_match_by_value(request.data['attribute_name']) is not None
 
+        if attribute_already_exists:
+            return Response(u"Attribute already exists.", status=status.HTTP_303_SEE_OTHER)
+
         # add attribute an existing policy
         new_policy = xacml_policy.add_atribute(rule_name, request.data['category'],
                                                request.data['attribute_name'],
@@ -127,9 +130,6 @@ def policy_attribute(request, policy_name, rule_name):
         serializer = PolicySerializer(policy, data=new_request_data)
 
         if serializer.is_valid():
-            if attribute_already_exists:
-                return Response(serializer.data, status=status.HTTP_303_SEE_OTHER)
-
             serializer.save()
 
             # update policy in PAP
@@ -143,9 +143,16 @@ def policy_attribute(request, policy_name, rule_name):
 
     # modify attribute
     elif request.method == 'PUT':
+        # attribute exists?
+        xacml_policy = XacmlUtil(content=policy.content)
+        attribute_exists = xacml_policy.policy.get_match_by_value(request.data['attribute_name']) is not None
+
+        if not attribute_exists:
+            return Response(u"Attribute doesnt exists", status=status.HTTP_404_NOT_FOUND)
+
         # change policy
-        new_policy = XacmlUtil(content=policy.content).modify_attribute(rule_name, request.data['attribute_name'],
-                                                                        request.data['attribute_value'])
+        new_policy = xacml_policy.modify_attribute(rule_name, request.data['attribute_name'],
+                                                   request.data['attribute_value'])
 
         # define fields in request.data to serialize (querydict)
         new_request_data = QueryDict(mutable=True)
@@ -155,6 +162,9 @@ def policy_attribute(request, policy_name, rule_name):
         serializer = PolicySerializer(policy, data=new_request_data)
 
         if serializer.is_valid():
+            if not attribute_exists:
+                return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+
             serializer.save()
 
             # update policy in PAP

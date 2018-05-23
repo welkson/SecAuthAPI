@@ -129,49 +129,49 @@ class PolicyTests(APITestCase):
         response = self.client.post("/policy/%s/%s/" % (policy_name, rule_name), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_303_SEE_OTHER)
 
-        # TODO: test pre/post-conditions in API (attribute already exists?)
+    def test_4_modify_attribute(self):
+        """
+        Ensure we can modify an attribute in an existing policy
+        """
 
-        print XacmlUtil(content=Policy.objects.all()[0].content).xacml_formatter()
+        print "\nTesting method modify_attribute()..."
+
+        # policy data
+        policy = XacmlUtil(content=Policy.objects.all()[0].content)
+        policy_name = policy.get_policy_name()
+        rule_name = policy.policy.rules[0].properties.get('RuleId').value
+
+        # attribute data
+        attribute_category1 = 'urn:oasis:names:tc:xacml:1.0:subject-category:access-subject'
+        attribute_name1 = 'http://wso2.org/claims/role'
+        attribute_value1 = 'admin'
+
+        # attribute data
+        data = {'category': attribute_category1, 'attribute_name': attribute_name1,
+                'attribute_value': attribute_value1}
+
+        # testcase 1 (http status code return)
+        response = self.client.put("/policy/%s/%s/" % (policy_name, rule_name), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # testcase 2 (new attribute value)
+        policy = XacmlUtil(content=Policy.objects.all()[0].content)
+        attr = policy.policy.get_match_by_value('http://wso2.org/claims/role')
+        self.assertEqual(attr.attribute_value.value, 'admin')
+
+        # testcase 3 (attribute inexistent)
+        attribute_category2 = 'urn:oasis:names:tc:xacml:1.0:subject-category:access-subject'
+        attribute_name2 = 'http://ifrn.edu.br/attribute/inexistent'
+        attribute_value2 = 'inexistent_attribute'
+
+        # attribute data
+        data2 = {'category': attribute_category2, 'attribute_name': attribute_name2,
+                 'attribute_value': attribute_value2}
+
+        response = self.client.put("/policy/%s/%s/" % (policy_name, rule_name), data2, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-
-
-
-
-
-
-
-    #
-    #
-    #
-    # def test_4_modify_attribute(self):
-    #     """
-    #     Ensure we can modify an attribute in an existing policy
-    #     """
-    #
-    #     print "\nTesting method modify_attribute()..."
-    #
-    #     # attribute data
-    #     attribute_name = 'http://wso2.org/claims/role'
-    #
-    #     # change "role" attribute (from "support" to "admin")
-    #     policy = XacmlUtil(content=Policy.objects.all()[0].content)
-    #     attr = policy.policy.get_match_by_value('http://wso2.org/claims/role')
-    #     attr.attribute_value.value = 'admin'
-    #     new_policy = policy.policy.toXML()
-    #
-    #     # policy data
-    #     data = {'description': 'New Ticket Only Support', 'name': 'NewTicketOnlySupport', 'content': new_policy}
-    #
-    #     # testcase
-    #     response = self.client.put("/policy/%s/" % policy.get_policy_name(), data, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-    #     self.assertEqual(Policy.objects.count(), 1)
-    #
-    #     # test attribute value
-    #     policytest = XacmlUtil(content=Policy.objects.all()[0].content)
-    #     attr = policytest.policy.get_match_by_value(attribute_name)
-    #     self.assertEqual(attr.attribute_value.value, 'admin')
     #
     # def test_5_delete_attribute(self):
     #     """
