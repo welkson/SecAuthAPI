@@ -150,7 +150,7 @@ def policy_attribute(request, policy_name, rule_name):
         if not attribute_exists:
             return Response(u"Attribute doesnt exists", status=status.HTTP_404_NOT_FOUND)
 
-        # change policy
+        # change policy attribute
         new_policy = xacml_policy.modify_attribute(rule_name, request.data['attribute_name'],
                                                    request.data['attribute_value'])
 
@@ -178,6 +178,14 @@ def policy_attribute(request, policy_name, rule_name):
 
     # remove attribute
     elif request.method == 'DELETE':
+        # attribute exists?
+        xacml_policy = XacmlUtil(content=policy.content)
+        attribute_exists = xacml_policy.policy.get_match_by_value(request.data['attribute_name']) is not None
+
+        if not attribute_exists:
+            return Response(u"Attribute doesnt exists", status=status.HTTP_404_NOT_FOUND)
+
+        # delete attribute
         new_policy = XacmlUtil(content=policy.content).remove_attribute(rule_name, request.data['attribute_name'])
 
         # define fields in request.data to serialize (querydict)

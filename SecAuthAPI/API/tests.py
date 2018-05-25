@@ -171,38 +171,33 @@ class PolicyTests(APITestCase):
         response = self.client.put("/policy/%s/%s/" % (policy_name, rule_name), data2, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_5_delete_attribute(self):
+        """
+        Ensure we can delete an attribute in an existing policy
+        """
 
-    #
-    # def test_5_delete_attribute(self):
-    #     """
-    #     Ensure we can delete an attribute in an existing policy
-    #     """
-    #
-    #     print "\nTesting method delete_attribute()..."
-    #
-    #     # attribute data
-    #     attribute_name = 'http://wso2.org/claims/role'
-    #
-    #     # retrieve policy
-    #     policy = XacmlUtil(content=Policy.objects.all()[0].content)
-    #
-    #     # remove attribute
-    #     policy.policy.remove_any_of_by_name(attribute_name)
-    #
-    #     # create new policy with modifications
-    #     new_policy = policy.policy.toXML()
-    #
-    #     # policy data
-    #     data = {'description': 'New Ticket Only Support', 'name': 'NewTicketOnlySupport', 'content': new_policy}
-    #
-    #     # testcase
-    #     response = self.client.delete("/policy/%s/" % policy.get_policy_name(), data, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-    #     self.assertEqual(Policy.objects.count(), 1)
-    #
-    #     attr = new_policy.policy.get_match_by_value(attribute_name)
-    #
-    #     # testcase
-    #     self.assertIsNone(attr)
-    #
+        print "\nTesting method delete_attribute()..."
 
+        # policy data
+        policy = XacmlUtil(content=Policy.objects.all()[0].content)
+        policy_name = policy.get_policy_name()
+        rule_name = policy.policy.rules[0].properties.get('RuleId').value
+
+        # attribute data
+        attribute_name = 'http://wso2.org/claims/role'
+
+        # attribute data
+        data = {'attribute_name': attribute_name}
+
+        # testcase 1 (attrbute is deleted?)
+        response = self.client.delete("/policy/%s/%s/" % (policy_name, rule_name), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Policy.objects.count(), 1)
+        policy2 = XacmlUtil(content=Policy.objects.all()[0].content)
+        attr = policy2.policy.get_match_by_value(attribute_name)
+        self.assertIsNone(attr)
+
+        # testcase 2 (attribute inexistent)
+        data = {'attribute_name': 'inexistent_attribute'}
+        response = self.client.delete("/policy/%s/%s/" % (policy_name, rule_name), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
