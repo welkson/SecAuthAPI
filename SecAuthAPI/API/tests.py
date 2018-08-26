@@ -22,6 +22,13 @@ class PolicyTests(APITestCase):
         # API Auth
         self.client.login(username=user.username, password=password)
 
+
+    def test_0_add_policy(self, setup=False):
+        """
+        Ensure we can add an existing policy
+        """
+        if setup == False: print "\nTesting method add_policy()..."
+
         # sample policy
         with open('extra/Policy/NewTicketOnlySupport.xml', 'r') as xacml_file:
             xacml_policy = xacml_file.read()
@@ -39,12 +46,15 @@ class PolicyTests(APITestCase):
         response = self.client.post("/policy/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_303_SEE_OTHER)
 
+
     def test_1_modify_policy(self):
         """
-        Ensure we can modify a existing policy
+        Ensure we can modify an existing policy
         """
-
         print "\nTesting method modify_policy()..."
+
+        # setup
+        self.test_0_add_policy(setup=True)
 
         # change "role" attribute (from "support" to "admin")
         policy = XacmlUtil(content=Policy.objects.all()[0].content)
@@ -69,10 +79,13 @@ class PolicyTests(APITestCase):
 
     def test_2_delete_policy(self):
         """
-        Ensure we can delete a existing policy
+        Ensure we can delete an existing policy
         """
 
         print "\nTesting method delete_policy()..."
+
+        # setup
+        self.test_0_add_policy(setup=True)
 
         # policy data
         policy_name = Policy.objects.all()[0].name
@@ -92,6 +105,9 @@ class PolicyTests(APITestCase):
         """
 
         print "\nTesting method add_attribute()..."
+
+        # setup
+        self.test_0_add_policy(setup=True)
 
         # policy data
         policy = XacmlUtil(content=Policy.objects.all()[0].content)
@@ -136,6 +152,9 @@ class PolicyTests(APITestCase):
 
         print "\nTesting method modify_attribute()..."
 
+        # setup
+        self.test_0_add_policy(setup=True)
+
         # policy data
         policy = XacmlUtil(content=Policy.objects.all()[0].content)
         policy_name = policy.get_policy_name()
@@ -177,6 +196,9 @@ class PolicyTests(APITestCase):
         """
 
         print "\nTesting method delete_attribute()..."
+
+        # setup
+        self.test_0_add_policy(setup=True)
 
         # policy data
         policy = XacmlUtil(content=Policy.objects.all()[0].content)
