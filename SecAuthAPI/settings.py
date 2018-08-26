@@ -90,13 +90,13 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-        'django.template.loaders.eggs.Loader',
-    )),
-)
+# TEMPLATE_LOADERS = (
+#     ('django.template.loaders.cached.Loader', (
+#         'django.template.loaders.filesystem.Loader',
+#         'django.template.loaders.app_directories.Loader',
+#         'django.template.loaders.eggs.Loader',
+#     )),
+# )
 
 
 WSGI_APPLICATION = 'SecAuthAPI.wsgi.application'
@@ -160,6 +160,12 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+# Django-Rest-Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
 
 # Authorization Server (AS)
 #  WSO Example
