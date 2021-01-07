@@ -6,4 +6,4 @@ djangorestframework-jwt==1.10.0
 suds==0.4
 xmltodict==0.10.2
 django-oauth-toolkit
-lxml==3.7.3
+lxml==4.6.2
