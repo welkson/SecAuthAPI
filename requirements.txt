@@ -3,7 +3,7 @@ Django
 django-rest-swagger==2.1.2
 djangorestframework
 djangorestframework-jwt==1.10.0
-suds==0.4
+suds==1.0.0
 xmltodict==0.10.2
 django-oauth-toolkit
 lxml==3.7.3
